@@ -27,7 +27,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
-
 let currentSlide = 0;
 
 function moveSlide(step) {
@@ -43,6 +42,45 @@ function moveSlide(step) {
     }
 
     const slider = document.querySelector('.slider');
-    // Mover o slider de acordo com a quantidade de slides
     slider.style.transform = `translateX(-${currentSlide * (100 / totalSlides)}%)`;
+
+    updateDots();  // Atualiza as bolinhas
 }
+
+// Atualiza a classe ativa das bolinhas
+function updateDots() {
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((dot, index) => {
+        if (index === currentSlide) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+}
+
+// Cria as bolinhas de navegação dinamicamente
+function createDots() {
+    const slides = document.querySelectorAll('.slider img');
+    const dotContainer = document.querySelector('.dot-container');
+    
+    slides.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotContainer.appendChild(dot);
+    });
+
+    updateDots();  // Inicializa as bolinhas com a classe ativa
+}
+
+// Navega diretamente para o slide clicado
+function goToSlide(index) {
+    currentSlide = index;
+    const slider = document.querySelector('.slider');
+    slider.style.transform = `translateX(-${currentSlide * (100 / document.querySelectorAll('.slider img').length)}%)`;
+    updateDots();  // Atualiza as bolinhas
+}
+
+// Chama a função para criar as bolinhas ao carregar a página
+createDots();
